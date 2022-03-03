@@ -4,12 +4,8 @@ fetch('http://localhost:3000/api/products')
             return res.json();
         }
     })
-    .then(function (value) {
-        console.log(value);
-        let items = [...value];
-        // déconstruction d'objet; prendre la valeur qui est à l'intérieur du tableau
+    .then(function (items) {
         addArticles(items);
-
     })
     .catch(function (err) {
         // Une erreur est survenue
@@ -20,7 +16,6 @@ addArticles = (items) => {
             // Ceci sera exécuté 5 fois
             // À chaque éxécution, la variable "pas" augmentera de 1
             // Lorsque'elle sera arrivée à 5, le boucle se terminera.
-            console.log(items[i]);
 
             let articles = document.getElementById("items");
             let newArticle = document.createElement("article");
@@ -37,7 +32,7 @@ addArticles = (items) => {
             p.innerText = items[i].description;
             newArticle.appendChild(p);
             let a = document.createElement("a");
-            a.setAttribute("href", items[i]._id);
+            a.setAttribute("href", "./product.html?id=" + items[i]._id);
             a.appendChild(newArticle);
             articles.appendChild(a);
         }

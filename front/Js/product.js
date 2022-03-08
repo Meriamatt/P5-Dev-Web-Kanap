@@ -3,6 +3,11 @@ var url = new URL(productUrl);
 var id = url.searchParams.get("id");
 
 
+let product = {
+    id: id,
+    selectedColor: '',
+    quantity: '',
+};
 
 
 fetch('http://localhost:3000/api/products/' + id)
@@ -13,6 +18,8 @@ fetch('http://localhost:3000/api/products/' + id)
     })
     .then(function (detail) {
         addDetail(detail);
+        product = detail;
+        console.log(detail);
 
     })
     .catch(function (err) {
@@ -44,3 +51,4 @@ addDetail = (detail) => {
     }
 
 }
+

@@ -13,9 +13,7 @@ fetch('http://localhost:3000/api/products')
 addArticles = (items) => {
     if (items && items.length > 0) {
         for (let i = 0; i < items.length; i++) {
-            // Ceci sera exécuté 5 fois
-            // À chaque éxécution, la variable "pas" augmentera de 1
-            // Lorsque'elle sera arrivée à 5, le boucle se terminera.
+            // Ceci sera exécuté le long du tableau
 
             let articles = document.getElementById("items");
             let newArticle = document.createElement("article");
@@ -35,6 +33,7 @@ addArticles = (items) => {
             a.setAttribute("href", "./product.html?id=" + items[i]._id);
             a.appendChild(newArticle);
             articles.appendChild(a);
+            //créations des élements html 
         }
     } else {
         alert('tableau indéfini ou vide');

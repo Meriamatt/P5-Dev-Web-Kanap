@@ -1,12 +1,13 @@
-var productUrl = window.location.href;
-var url = new URL(productUrl);
-var id = url.searchParams.get("id");
+let productUrl = window.location.href;
+let url = new URL(productUrl);
+let id = url.searchParams.get("id");
+let itemToAdd = false;
 
 
 let product = {
     id: id,
     selectedColor: '',
-    quantity: '',
+    quantity: 0,
 };
 
 
@@ -52,3 +53,41 @@ addDetail = (detail) => {
 
 }
 
+document.getElementById('colors').addEventListener('change', function (event) { // On écoute l'événement click
+    console.log(event.target.value);
+    product.selectedColor = event.target.value;
+    console.log(product);
+});
+document.getElementById('quantity').addEventListener('input', function (event) {
+    console.log(event.target.value);
+    product.quantity = parseInt(event.target.value);
+    console.log(product);
+});
+
+document.getElementById('addToCart').addEventListener('click', function (event) {
+    addProductToCart(product);
+    console.log('click');
+});
+addProductToCart = (product) => {
+    let products = JSON.parse(localStorage.getItem('listProduct'));
+    let chosenColor = document.getElementById("colors").value;
+    if (products != undefined && products.length != 0) {
+        for (let i = 0; i < products.length; i++) {
+            if (products[i]._id == product._id && chosenColor == products[i].selectedColor) {
+                products[i].quantity += product.quantity;
+                itemToAdd = false;
+                break;
+            } else {
+                itemToAdd = true;
+            }
+        }
+        if (itemToAdd == true) {
+            products.push(product);
+            itemToAdd = false;
+        }
+    } else {
+        products = [];
+        products.push(product);
+    }
+    localStorage.setItem('listProduct', JSON.stringify(products));
+}

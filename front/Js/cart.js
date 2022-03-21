@@ -1,5 +1,5 @@
 let products = JSON.parse(localStorage.getItem('listProduct')); // récupérations des produits ajoutés en panier 
-let productOrder = {  //création d'un objet qui contient un objet formulaire et un tableau de produits
+let productOrder = { //création d'un objet qui contient un objet formulaire et un tableau de produits
     contact: {
         firstName: "",
         lastName: "",
@@ -15,64 +15,66 @@ idCopy = () => {
         productOrder.products.push(
             products[i]._id,
         )
-}; 
-idCopy(); // copier tout les ID des produits et les coller dans le tableau products 
+    };
+    idCopy(); // copier tout les ID des produits et les coller dans le tableau products 
 
 };
 panier = () => {
     let cartItem = document.getElementById('cart__items');
-    for (i = 0; i < products.length; i++) {
-        let article = document.createElement("article");
-        article.classList.add("cart__item");
-        article.setAttribute("data-id", products[i]._id);
-        article.setAttribute("data-color", products[i].selectedColor);
-        let divImg = document.createElement("div");
-        divImg.classList.add("cart__item__img");
-        let img = document.createElement("img");
-        img.setAttribute("src", products[i].imageUrl);
-        img.setAttribute("alt", products[i].altTxt);
-        let divcartItemContent = document.createElement("div");
-        divcartItemContent.classList.add("cart__item__content");
-        let divCartItemDescription = document.createElement("div");
-        divCartItemDescription.classList.add("cart__item__content__description");
-        let h2 = document.createElement("h2");
-        h2.innerText = products[i].name;
-        let p = document.createElement("p");
-        p.innerText = "Couleur: " + products[i].selectedColor;
-        let pPrice = document.createElement("p");
-        pPrice.innerText = "prix: " + products[i].price + "€";
-        let divCartItemSetting = document.createElement("div");
-        divCartItemSetting.classList.add("cart__item__content__settings");
-        let divCartItemQuantity = document.createElement("div");
-        divCartItemQuantity.classList.add("cart__item__content__settings__quantity");
-        let p1 = document.createElement("p");
-        p1.innerText = "Quantité: ";
-        let input = document.createElement("input");
-        input.type = "number";
-        input.setAttribute("min", 1);
-        input.setAttribute("max", 100);
-        input.className = "itemQuantity"; 
-        input.name = "itemQuantity";
-        input.value = products[i].quantity;
-        let divDelet = document.createElement("div");
-        divDelet.classList.add("cart__item__content__settings__delete");
-        let pDelet = document.createElement("p");
-        pDelet.innerText = "Supprimer";
-        pDelet.classList.add("deleteItem");
-        article.appendChild(divImg);
-        article.appendChild(divcartItemContent);
-        divImg.appendChild(img);
-        divcartItemContent.appendChild(divCartItemDescription);
-        divcartItemContent.appendChild(divCartItemSetting);
-        divCartItemDescription.appendChild(h2);
-        divCartItemDescription.appendChild(p);
-        divCartItemDescription.appendChild(pPrice);
-        divCartItemSetting.appendChild(divCartItemQuantity);
-        divCartItemSetting.appendChild(divDelet);
-        divCartItemQuantity.appendChild(p1);
-        divCartItemQuantity.appendChild(input);
-        divDelet.appendChild(pDelet);
-        cartItem.appendChild(article);
+    if (products != undefined && products.length != 0) {
+        for (i = 0; i < products.length; i++) {
+            let article = document.createElement("article");
+            article.classList.add("cart__item");
+            article.setAttribute("data-id", products[i]._id);
+            article.setAttribute("data-color", products[i].selectedColor);
+            let divImg = document.createElement("div");
+            divImg.classList.add("cart__item__img");
+            let img = document.createElement("img");
+            img.setAttribute("src", products[i].imageUrl);
+            img.setAttribute("alt", products[i].altTxt);
+            let divcartItemContent = document.createElement("div");
+            divcartItemContent.classList.add("cart__item__content");
+            let divCartItemDescription = document.createElement("div");
+            divCartItemDescription.classList.add("cart__item__content__description");
+            let h2 = document.createElement("h2");
+            h2.innerText = products[i].name;
+            let p = document.createElement("p");
+            p.innerText = "Couleur: " + products[i].selectedColor;
+            let pPrice = document.createElement("p");
+            pPrice.innerText = "prix: " + products[i].price + "€";
+            let divCartItemSetting = document.createElement("div");
+            divCartItemSetting.classList.add("cart__item__content__settings");
+            let divCartItemQuantity = document.createElement("div");
+            divCartItemQuantity.classList.add("cart__item__content__settings__quantity");
+            let p1 = document.createElement("p");
+            p1.innerText = "Quantité: ";
+            let input = document.createElement("input");
+            input.type = "number";
+            input.setAttribute("min", 1);
+            input.setAttribute("max", 100);
+            input.className = "itemQuantity";
+            input.name = "itemQuantity";
+            input.value = products[i].quantity;
+            let divDelet = document.createElement("div");
+            divDelet.classList.add("cart__item__content__settings__delete");
+            let pDelet = document.createElement("p");
+            pDelet.innerText = "Supprimer";
+            pDelet.classList.add("deleteItem");
+            article.appendChild(divImg);
+            article.appendChild(divcartItemContent);
+            divImg.appendChild(img);
+            divcartItemContent.appendChild(divCartItemDescription);
+            divcartItemContent.appendChild(divCartItemSetting);
+            divCartItemDescription.appendChild(h2);
+            divCartItemDescription.appendChild(p);
+            divCartItemDescription.appendChild(pPrice);
+            divCartItemSetting.appendChild(divCartItemQuantity);
+            divCartItemSetting.appendChild(divDelet);
+            divCartItemQuantity.appendChild(p1);
+            divCartItemQuantity.appendChild(input);
+            divDelet.appendChild(pDelet);
+            cartItem.appendChild(article);
+        }
     }
 } //création des élement Html
 
@@ -192,7 +194,7 @@ document.getElementById('order').addEventListener('click', function (event) { //
                 if (res.ok) {
                     return res.json();
                 }
-            }) 
+            })
             .then(function (value) {
                 console.log(value);
                 window.location = 'confirmation.html?orderId=' + value.orderId; //redirection vers la page confirmation en passant l'orderID dans l'URL de la page
@@ -205,27 +207,29 @@ document.getElementById('order').addEventListener('click', function (event) { //
 });
 totalArticles = () => {
 
-    if (products.length === 0) {
+    if (products != undefined && products.length === 0) {
         return 0;
     }
-
     let total = 0;
-    for (let i = 0; i < products.length; i++) {
-        total += products[i].quantity;
+    if (products != undefined && products.length != 0) {
+        for (let i = 0; i < products.length; i++) {
+            total += products[i].quantity;
+        }
+        console.log(total);
+        document.getElementById("totalQuantity").innerText = total;
     }
-    console.log(total);
-    document.getElementById("totalQuantity").innerText = total;
 };
 totalArticles();
 calculateSum = () => {
 
-    if (products.length === 0) {
+    if (products != undefined && products.length === 0) {
         return 0;
     }
-
     let sum = 0;
-    for (let i = 0; i < products.length; i++) {
-        sum += products[i].price * products[i].quantity;
+    if (products != undefined && products.length != 0) {
+        for (let i = 0; i < products.length; i++) {
+            sum += products[i].price * products[i].quantity;
+        }
     }
     console.log(sum);
     document.getElementById("totalPrice").innerText = sum;

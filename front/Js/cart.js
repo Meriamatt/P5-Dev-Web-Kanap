@@ -1,5 +1,5 @@
-let products = JSON.parse(localStorage.getItem('listProduct'));
-let productOrder = {
+let products = JSON.parse(localStorage.getItem('listProduct')); // récupérations des produits ajoutés en panier 
+let productOrder = {  //création d'un objet qui contient un objet formulaire et un tableau de produits
     contact: {
         firstName: "",
         lastName: "",
@@ -9,11 +9,14 @@ let productOrder = {
     },
     products: [],
 }
-let orderId = "";
-for (let i = 0; i < products.length; i++) {
-    productOrder.products.push(
-        products[i]._id,
-    )
+
+idCopy = () => {
+    for (let i = 0; i < products.length; i++) {
+        productOrder.products.push(
+            products[i]._id,
+        )
+}; 
+idCopy(); // copier tout les ID des produits et les coller dans le tableau products 
 
 };
 panier = () => {
@@ -48,7 +51,7 @@ panier = () => {
         input.type = "number";
         input.setAttribute("min", 1);
         input.setAttribute("max", 100);
-        input.className = "itemQuantity"; // set the CSS class
+        input.className = "itemQuantity"; 
         input.name = "itemQuantity";
         input.value = products[i].quantity;
         let divDelet = document.createElement("div");
@@ -71,17 +74,17 @@ panier = () => {
         divDelet.appendChild(pDelet);
         cartItem.appendChild(article);
     }
-}
+} //création des élement Html
 
 panier();
 for (i = 0; i < document.getElementsByClassName('itemQuantity').length; i++) {
-    document.getElementsByClassName('itemQuantity')[i].addEventListener('change', function (event) { // On écoute l'événement click   
-        let currentId = event.target.closest("article").getAttribute("data-id");
-        let chosenColor = event.target.closest("article").getAttribute("data-color");
+    document.getElementsByClassName('itemQuantity')[i].addEventListener('change', function (event) { // On écoute l'événement click du changement de quantité  
+        let currentId = event.target.closest("article").getAttribute("data-id"); // l'Id le plus proche de l'article courant
+        let chosenColor = event.target.closest("article").getAttribute("data-color"); // le choix de couleur le plus proche de l'article
         for (let i = 0; i < products.length; i++) {
             if (products[i]._id == currentId && chosenColor == products[i].selectedColor) {
                 products[i].quantity = parseInt(event.target.value);
-            }
+            } // si l'Id de l'article courant existe déjà dans le tableau des produits et que la couleur choisi est la même ue celle dans le tableau
         }
         localStorage.setItem('listProduct', JSON.stringify(products));
         totalArticles();
@@ -111,10 +114,10 @@ document.getElementById('firstName').addEventListener('change', function (event)
         let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
         firstNameErrorMsg.innerText = "veuillez indiquer un prénom valide";
     }
-});
+}); // si firstName contient d'autres caractères que les lettres afficher le message d'erreur
 
 allLetter = (entry) => {
-    var letters = /^[a-zA-Z\s]*$/;
+    var letters = /^[a-zA-Z\s]*$/; //REGEX de lettres et d'espace seulement 
     if (entry.match(letters)) {
         return true;
     } else {
@@ -141,7 +144,7 @@ document.getElementById('address').addEventListener('change', function (event) {
     }
 });
 letterNumber = (entry) => {
-    var letterAndNumber = ("/[^a-zA-Z0-9 ]/", "");
+    var letterAndNumber = ("/[^a-zA-Z0-9 ]/", ""); //REGEX de lettres de nombres et d'espace seulement 
     if (entry.match(letterAndNumber)) {
         return true;
     } else {
@@ -174,7 +177,7 @@ validEmail = (entry) => {
         return false;
     }
 };
-document.getElementById('order').addEventListener('click', function (event) { // On écoute l'événement click
+document.getElementById('order').addEventListener('click', function (event) { // On écoute l'événement click sur commander
     console.log(productOrder);
     send = () => {
         fetch("http://localhost:3000/api/products/order", {
@@ -189,14 +192,15 @@ document.getElementById('order').addEventListener('click', function (event) { //
                 if (res.ok) {
                     return res.json();
                 }
-            })
+            }) 
             .then(function (value) {
                 console.log(value);
-                window.location = 'confirmation.html?orderId=' + value.orderId;
+                window.location = 'confirmation.html?orderId=' + value.orderId; //redirection vers la page confirmation en passant l'orderID dans l'URL de la page
             });
 
     }
     send();
+    // envoie des données à l'API 
     localStorage.clear();
 });
 totalArticles = () => {

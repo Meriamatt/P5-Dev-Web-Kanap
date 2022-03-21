@@ -1,17 +1,13 @@
-let productUrl = window.location.href;
+let productUrl = window.location.href; // indiquer le lien courant (lien du produit choisi)
 let url = new URL(productUrl);
-let id = url.searchParams.get("id");
+let id = url.searchParams.get("id"); // récuperer l'ID du produit à partir du lien courant 
 let itemToAdd = false;
 
 
-let product = {
-    id: id,
-    selectedColor: '',
-    quantity: 0,
-};
+let product = {};
 
 
-fetch('http://localhost:3000/api/products/' + id)
+fetch('http://localhost:3000/api/products/' + id) //récupérer que l'API du produit choisi
     .then(function (res) {
         if (res.ok) {
             return res.json();
@@ -53,14 +49,14 @@ addDetail = (detail) => {
 
 }
 
-document.getElementById('colors').addEventListener('change', function (event) { // On écoute l'événement click
-    console.log(event.target.value);
-    product.selectedColor = event.target.value;
+document.getElementById('colors').addEventListener('change', function (event) { // On écoute l'événement click de la sélection de la couleur
+    console.log(event.target.value); //(event.target.value est la couleur sélectionnée)
+    product.selectedColor = event.target.value; // ajout de la couleur sélectionnée à l'objet produit 
     console.log(product);
 });
 document.getElementById('quantity').addEventListener('input', function (event) {
     console.log(event.target.value);
-    product.quantity = parseInt(event.target.value);
+    product.quantity = parseInt(event.target.value); // ajout de la quantité selectionné à l'objet produit
     console.log(product);
 });
 
@@ -69,11 +65,13 @@ document.getElementById('addToCart').addEventListener('click', function (event) 
     console.log('click');
 });
 addProductToCart = (product) => {
-    let products = JSON.parse(localStorage.getItem('listProduct'));
+    let products = JSON.parse(localStorage.getItem('listProduct')); //récupération des données du localstorage
     let chosenColor = document.getElementById("colors").value;
     if (products != undefined && products.length != 0) {
         for (let i = 0; i < products.length; i++) {
-            if (products[i]._id == product._id && chosenColor == products[i].selectedColor) {
+            if (products[i]._id == product._id && chosenColor == products[i].selectedColor)
+            // si le produit actuel existe déjà dans le tableau do local storage, et que la couleur choisie est la même 
+             {
                 products[i].quantity += product.quantity;
                 itemToAdd = false;
                 break;
@@ -89,5 +87,5 @@ addProductToCart = (product) => {
         products = [];
         products.push(product);
     }
-    localStorage.setItem('listProduct', JSON.stringify(products));
+    localStorage.setItem('listProduct', JSON.stringify(products)); //envoie des données aux localstorage
 }

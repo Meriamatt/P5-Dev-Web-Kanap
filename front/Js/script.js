@@ -1,3 +1,4 @@
+// récupération de l'API
 fetch('http://localhost:3000/api/products')
     .then(function (res) {
         if (res.ok) {
@@ -8,12 +9,14 @@ fetch('http://localhost:3000/api/products')
         addArticles(items);
     })
     .catch(function (err) {
-        // Une erreur est survenue
+        alert('Une erreur est survenue');
     });
+    // fonction d'affichage des articles dans la page d'acceuil
 addArticles = (items) => {
-    if (items && items.length > 0) {
+    // si l'élément items est défini (tableau) et le tableau items n'est pas vide 
+    if (items != undefined && items.length > 0) {
         for (let i = 0; i < items.length; i++) {
-            // Ceci sera exécuté le long du tableau
+            // le traitement sera exécuté sur chaque élément du tableau
 
             let articles = document.getElementById("items");
             let newArticle = document.createElement("article");

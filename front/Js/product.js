@@ -87,5 +87,5 @@ addProductToCart = (product) => {
         products = [];
         products.push(product);
     }
-    localStorage.setItem('listProduct', JSON.stringify(products)); //envoie des données aux localstorage
+    localStorage.setItem('listProduct', JSON.stringify(products));
 }

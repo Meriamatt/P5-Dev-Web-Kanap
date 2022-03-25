@@ -61,8 +61,14 @@ document.getElementById('quantity').addEventListener('input', function (event) {
 });
 
 document.getElementById('addToCart').addEventListener('click', function (event) {
-    addProductToCart(product);
-    console.log('click');
+        if ((product.selectedColor != undefined)  && (product.selectedColor[i] != product.selectedColor[0]) && (product.quantity > 0) && (product.quantity < 101)) {
+            addProductToCart(product);
+            console.log('click');
+        }
+        else {
+            alert("veuillez présicez la couleur et la quantité du produit");
+        }
+    
 });
 addProductToCart = (product) => {
     let products = JSON.parse(localStorage.getItem('listProduct')); //récupération des données du localstorage
@@ -87,5 +93,6 @@ addProductToCart = (product) => {
         products = [];
         products.push(product);
     }
+
     localStorage.setItem('listProduct', JSON.stringify(products));
 }

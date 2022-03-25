@@ -9,7 +9,11 @@ let productOrder = { //création d'un objet qui contient un objet formulaire et 
     },
     products: [],
 }
-
+let firstNameIsValid = false;
+let lastNameIsValid = false;
+let cityIsValid = false;
+let addressIsValid = false;
+let emailIsValid = false;
 idCopy = () => {
     for (let i = 0; i < products.length; i++) {
         productOrder.products.push(
@@ -142,9 +146,14 @@ for (i = 0; i < document.getElementsByClassName('deleteItem').length; i++) {
 document.getElementById('firstName').addEventListener('change', function (event) { // On écoute l'événement change
 
     productOrder.contact.firstName = event.target.value;
-    if (allLetter(event.target.value) == false) {
+    if (allLetter(event.target.value) == false){
         let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
         firstNameErrorMsg.innerText = "veuillez indiquer un prénom valide";
+        firstNameIsValid = false;
+    }
+    else {
+        firstNameErrorMsg.innerText = "";
+        firstNameIsValid = true;
     }
 }); // si firstName contient d'autres caractères que les lettres afficher le message d'erreur
 
@@ -164,6 +173,11 @@ document.getElementById('lastName').addEventListener('change', function (event) 
     if (allLetter(event.target.value) == false) {
         let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
         lastNameErrorMsg.innerText = "veuillez indiquer un nom valide";
+        lasttNameIsValid = false;
+    }
+    else {
+        lastNameErrorMsg.innerText = "";
+        lastNameIsValid = true;
     }
 });
 
@@ -173,6 +187,11 @@ document.getElementById('address').addEventListener('change', function (event) {
     if (letterNumber(event.target.value) == false) {
         let addressErrorMsg = document.getElementById("addressErrorMsg");
         addressErrorMsg.innerText = "veuillez indiquer une adresse valide";
+        addressIsValid = false;
+    }
+    else {
+        addressErrorMsg.innerText = "";
+        addressIsValid = true;
     }
 });
 letterNumber = (entry) => {
@@ -190,6 +209,11 @@ document.getElementById('city').addEventListener('change', function (event) { //
     if (allLetter(event.target.value) == false) {
         let cityErrorMsg = document.getElementById("cityErrorMsg");
         cityErrorMsg.innerText = "veuillez indiquer un nom de ville valide";
+        cityIsValid = false;
+    }
+    else {
+        cityErrorMsg.innerText = "";
+        cityIsValid = true;
     }
 });
 document.getElementById('email').addEventListener('change', function (event) { // On écoute l'événement change
@@ -198,6 +222,11 @@ document.getElementById('email').addEventListener('change', function (event) { /
     if (validEmail(event.target.value) == false) {
         let emailErrorMsg = document.getElementById("emailErrorMsg");
         emailErrorMsg.innerText = "veuillez indiquer un email valide";
+        emailIsValid = false;
+    }
+    else {
+        emailErrorMsg.innerText = "";
+        emailIsValid = true;
     }
 });
 validEmail = (entry) => {
@@ -209,29 +238,45 @@ validEmail = (entry) => {
         return false;
     }
 };
+send = () => {
+    fetch("http://localhost:3000/api/products/order", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productOrder)
+        })
+        .then(function (res) {
+            if (res.ok) {
+                return res.json();
+            }
+        })
+        .then(function (value) {
+            console.log(value);
+            window.location = 'confirmation.html?orderId=' + value.orderId; //redirection vers la page confirmation en passant l'orderID dans l'URL de la page
+        });
+}
+isValid = () => {
+    if ((firstNameIsValid == true) && (lastNameIsValid == true) && (addressIsValid == true)
+    && (cityIsValid == true) && (emailIsValid == true)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 document.getElementById('order').addEventListener('click', function (event) { // On écoute l'événement click sur commander
     console.log(productOrder);
-    send = () => {
-        fetch("http://localhost:3000/api/products/order", {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(productOrder)
-            })
-            .then(function (res) {
-                if (res.ok) {
-                    return res.json();
-                }
-            })
-            .then(function (value) {
-                console.log(value);
-                window.location = 'confirmation.html?orderId=' + value.orderId; //redirection vers la page confirmation en passant l'orderID dans l'URL de la page
-            });
-
+    if( (productOrder.contact.firstName != "") && (productOrder.contact.lastName != "") && (productOrder.contact.city != "") 
+    && (productOrder.contact.address != "") && (productOrder.contact.email != "") 
+    && (isValid() == true)) {
+        send();
+        }
+    else {
+        alert('veuillez remplir tout les champs du formulaire');
     }
-    send();
+    
     // envoie des données à l'API 
     localStorage.clear();
 });
